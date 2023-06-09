@@ -1,4 +1,6 @@
-﻿namespace Exceptions.Entities
+﻿using Exceptions.Entities.Exception;
+
+namespace Exceptions.Entities
 {
     internal class Account
     {
@@ -22,12 +24,18 @@
 
         public void Withdraw(double amount)
         {
-            Balance -= amount;
-        }
-
-        public override string ToString()
-        {
-            return $"{Number}, {Holder}, {Balance}, {WithdrawLimit}";
+            if (amount < WithdrawLimit && amount < Balance)
+            {
+                Balance -= amount;
+            }
+            else if (amount > WithdrawLimit)
+            {
+                throw new DomainException("The amount exceeds withdraw limit");
+            }
+            else
+            {
+                throw new DomainException("Not enough balance");
+            }
         }
     }
 }
